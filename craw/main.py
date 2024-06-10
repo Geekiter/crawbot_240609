@@ -30,6 +30,7 @@ y_dis = 0
 
 labels = ['left', 'stop', 'right']
 
+
 def motor(A1, A2, B1, B2):
     motor1.duty(A1)
     motor2.duty(A2)
@@ -118,16 +119,17 @@ while True:
         received_id1 = None
         try:
             parsed_values_list = parse_data(data)
+            print("parsed_values_list:", parsed_values_list)
             length1 = len(parsed_values_list)
             if length1 > 0:
                 for i in range(length1):
 
                     # assume the first value is the targeted id
-                    obj_id = int(parsed_values_list[indx].get('objId', None))
+                    obj_id = parsed_values_list[indx].get('objId', None)
                     if obj_id is None:
-
-                        received_id1 = int(parsed_values_list[i].get('id', 'N/A'))
-
+                        received_id1 = int(parsed_values_list[i].get('id', 9999))
+                    else:
+                        obj_id = int(obj_id)
 
                     if received_id1 == target_id:
                         indx = i
@@ -167,12 +169,12 @@ while True:
                 time.sleep(0.1)
             elif obj_id is "left":
                 for _ in range(10):
-                    motor(0, 0, 800, 0)
+                    motor(800, 0, 0, 0)
                     time.sleep(0.1)
                     motor(0, 0, 0, 0)
             elif obj_id is "right":
                 for _ in range(10):
-                    motor(800, 0, 0, 0)
+                    motor(0, 0, 800, 0)
                     time.sleep(0.1)
                     motor(0, 0, 0, 0)
             elif obj_id is "turning":
